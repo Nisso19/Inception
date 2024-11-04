@@ -1,5 +1,4 @@
 echo "Bonjour test"
-service mariadb start
 mysqld_safe --datadir='/var/lib/mysql' &
 
 until mysqladmin ping >/dev/null 2>&1; do

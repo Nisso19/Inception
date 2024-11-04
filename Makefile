@@ -1,5 +1,7 @@
 
 all:
+	mkdir -p /home/inception/data-wordpress
+	mkdir -p /home/inception/data-mariadb
 	docker compose -f ./srcs/docker-compose.yml up
 
 stop:
@@ -18,6 +20,8 @@ clean:
 	docker compose -f ./srcs/docker-compose.yml down --rmi all --volumes --remove-orphans
 
 fclean: clean
+	sudo rm -rf /home/inception/data-wordpress
+	sudo rm -rf /home/inception/data-mariadb
 	docker system prune -a
 
 .PHONY: all stop start down re clean fclean
