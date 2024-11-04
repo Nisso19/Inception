@@ -9,4 +9,6 @@ RUN wget  https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.p
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 COPY tools/start_setup.sh /start_setup.sh
+copy conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+RUN chmod 777 /start_setup.sh
 ENTRYPOINT ["bash", "/start_setup.sh"]

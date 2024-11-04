@@ -1,18 +1,23 @@
-NAME = Inception
-DOCKERCOMPOSE = docker compose -f srcs/docker-compose.yml
-DBPATH = /home/inception
-all:${NAME}
 
-${NAME}:
-	rm -rf ${DBPATH}/data-mariadb
-	rm -rf ${DBPATH}/data-wordpress
-	mkdir -p ${DBPATH}/data-mariadb
-	mkdir -p ${DBPATH}/data-wordpress
-	${DOCKERCOMPOSE} build
-	${DOCKERCOMPOSE} up
+all:
+	docker compose -f ./srcs/docker-compose.yml up -d
+
+stop:
+	docker compose -f ./srcs/docker-compose.yml stop
+
+start:
+	docker compose -f ./srcs/docker-compose.yml start
+
+down:
+	docker compose -f ./srcs/docker-compose.yml down
+
+re:
+	docker-compose -f ./srcs/docker-compose.yml up --build -d
 
 clean:
-	${DOCKERCOMPOSE} down
-	docker-compose -f srcs/docker-compose.yml down --volumes
-	rm -rf ${HOME}/data-mariadb
-	rm -rf ${HOME}/data-wordpress
+	docker compose -f ./srcs/docker-compose.yml down --rmi all --volumes --remove-orphans
+
+fclean: clean
+	docker system prune -a
+
+.PHONY: all stop start down re clean fclean

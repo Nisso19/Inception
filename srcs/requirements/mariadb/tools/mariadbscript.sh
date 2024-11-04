@@ -1,22 +1,17 @@
-#!/bin/sh
+service mariadb start
+#mysqld_safe &
 
-LOGFILE=/var/log/mariadb_init.log
+sleep 3
 
-echo "Starting MariaDB initialization script v7"
-service mariadb start >> $LOGFILE 2>&1
-until mysqladmin ping -u root --silent; do
-	echo "MariaDB is still starting up..."
-	sleep 2
-done
-echo "ca marche"
-mariadb -u root -p$MYSQL_ROOT_PASSWORD << EOS
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;
+mariadb -u root <<EOF
+CREATE DATABASE $MYSQL_DATABASE;
+CREATE USER $MYSQL_USER@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO $MYSQL_USER@'%';
 FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
-GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
-FLUSH PRIVILEGES;
-EOS
-mariadb -u root -p$MYSQL_ROOT_PASSWORD -e "SHOW GRANTS FOR '$MYSQL_USER'@'%';" >> $LOGFILE 2>&1
+EOF
 
-service mariadb stop
-exec "$@"
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
+echo "bonjour"
+mysqladmin -u root -p$MYSQL_ROOT_PASSWORD shutdown
+
+mysqld
