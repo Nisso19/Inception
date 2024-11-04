@@ -3,7 +3,7 @@ version: "3.7"
 services:
   nginx:
     container_name: nginx
-    image: nginx:inception
+    image: nginx
     networks:
       - inception
     depends_on:
