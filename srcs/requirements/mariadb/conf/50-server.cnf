@@ -1,8 +1,8 @@
 [mysqld]
-datadir = /var/lib/mysql
-socket = /var/run/mysqld/mysqld.sock
-bind_address = localhost
-port = 3306
-user = mysql
-character-set-server  = utf8mb4
-collation-server      = utf8mb4_general_ci
+user=mysql
+datadir=/var/lib/mysql
+bind_address= mariadb
+skip-name-resolve
+port=3306
+character-set-server=utf8mb4
+collation-server=utf8mb4_general_ci

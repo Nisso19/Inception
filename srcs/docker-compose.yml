@@ -1,6 +1,18 @@
-version: "3.7"
-
 services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    networks:
+    - inception
+    build:
+      context: ./requirements/mariadb/
+        #volumes:
+        # - mariadb:/var/lib/mysql
+    restart: unless-stopped
+    expose:
+      - "3306"
+    env_file: .env
+ 
   nginx:
     container_name: nginx
     image: nginx
@@ -17,21 +29,6 @@ services:
     ports:
       - "443:443"
     restart: on-failure
-  
-  mariadb:
-    container_name: mariadb
-    image: mariadb
-    networks:
-    - inception
-    build:
-      context: ./requirements/mariadb/
-      dockerfile: Dockerfile
-    env_file: .env
-    volumes:
-      - mariadb:/var/lib/mysql
-    restart: unless-stopped
-    expose:
-      - "3306"
  
   wordpress:
     container_name: wordpress
