@@ -9,7 +9,9 @@ stop:
 
 start:
 	docker compose -f ./srcs/docker-compose.yml start
-
+dir:
+	mkdir -p /home/inception/data-mariadb
+	mkdir -p /home/inception/data-wordpress
 down:
 	docker compose -f ./srcs/docker-compose.yml down
 

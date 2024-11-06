@@ -1,5 +1,5 @@
 FROM debian:bullseye
-RUN apt update -y && apt upgrade -y && apt install -y mariadb-server mariadb-client
+RUN apt update -y && apt upgrade -y && apt install mariadb-server mariadb-client -y
 RUN mkdir -p /var/run/mysqld \
     && chmod +x /var/run/mysqld \
     && chown -R mysql:mysql /var/run/mysqld \
