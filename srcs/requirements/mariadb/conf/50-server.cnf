@@ -1,8 +1,12 @@
+[mysql]
+default-character-set=utf8
+
 [mysqld]
 user=mysql
 datadir=/var/lib/mysql
-bind_address= mariadb
-skip-name-resolve
+socket=/var/run/mysqld/mysqld.sock
+bind_address= localhost
+skip-grant-tables
 port=3306
 character-set-server=utf8mb4
 collation-server=utf8mb4_general_ci
