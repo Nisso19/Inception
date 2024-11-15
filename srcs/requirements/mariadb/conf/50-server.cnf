@@ -5,7 +5,7 @@ default-character-set=utf8
 user=mysql
 datadir=/var/lib/mysql
 socket=/var/run/mysqld/mysqld.sock
-bind_address= localhost
+bind_address= 0.0.0.0
 skip-grant-tables
 port=3306
 character-set-server=utf8mb4

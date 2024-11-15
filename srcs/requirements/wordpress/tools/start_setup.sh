@@ -1,20 +1,29 @@
-sleep 30
-
+sleep 15
+service php7.4-fpm start
+cd /var/www/wordpress
 echo $MYSQL_DATABASE
 echo $MYSQL_USER
 echo $MYSQL_PASSWORD
+#while ! nc -z -w2 mariadb 3306; do
+#	echo "waiting for mariadb to be properly running\n"
+#	sleep 2
+#done
 if [ ! -f /var/www/wordpress/wp-config.php ]; then
 
 	#wp core download --path='/var/www/wordpress' --allow-root
-	sleep 20
-	./wp-cli.phar config create --allow-root \
-    	#wp config create --allow-root \
-		--dbname='SQL_Inception' \
-		--dbuser='yaainouc' \
-	       	--dbpass='changeme' \
+	#./wp-cli.phar config create --allow-root \
+    	wp config create --allow-root \
+		--dbname=$MYSQL_DATABASE \
+		--dbuser=$MYSQL_USER \
+		--dbpass=$MYSQL_PASSWORD \
 	       	--dbhost='mariadb:3306' \
-		--path='/var/www/wordpress' \
-		--skip-check
+		--path='/var/www/wordpress'
+		#--dbname='SQL_Inception' \
+		#--dbuser='yaainouc' \
+	       	#--dbpass='changeme' \
+	       	#--dbhost='mariadb:3306' \
+		#--path='/var/www/wordpress'
+		#--skip-check \
 	sleep 10
 	if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		echo "wp-config.php n'est pas creer"
@@ -24,8 +33,8 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		--title=$WP_TITLE \
 		--admin_user=$WP_ADMIN \
 		--admin_password=$WP_ADMIN_PASSWORD \
-		--admin_email=$WP_ADMIN_EMAIL \
-		--path='/var/www/wordpress'
+		--path='/var/www/wordpress' \
+		--admin_email="test@test.com" 
     	wp user create $WP_USER \
 		$WP_USER_EMAIL \
 		--role=author \
@@ -35,4 +44,5 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 	fi
 fi
 echo -e "starting php fpm"
+service php7.4-fpm stop
 exec php-fpm7.4 -F
