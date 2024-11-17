@@ -1,0 +1,90 @@
+events {
+	# The maximum number of simultaneous connections that can be opened by
+	# a worker process.
+	worker_connections 16;
+}
+
+http {
+	##
+	# Basic Settings
+	##
+
+	sendfile on;
+	# Cause nginx to attempt to sends its HTTP response in one packet instead of using partial frames.
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+	ssl_prefer_server_ciphers on;
+	# Include the mapping of file name extensions to MIME types of responses and defines the default type.
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# Logging Settings
+	##
+
+	# Set the path, format and configuration for a buffered log write.
+	access_log /var/log/nginx/access.log;
+	# Configues default error logger.
+	error_log /var/log/nginx/error.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+
+	##
+	# Virtual Host Configs
+	##
+
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+
+server {
+	listen	443 ssl;
+	listen	[::]:443 ssl;
+
+	server_name	yaainouc.42.fr;
+
+	root	/var/www/wordpress;
+
+	ssl_certificate		/etc/nginx/ssl/selfsigned.crt;
+	ssl_certificate_key	/etc/nginx/ssl/selfsigned.key;
+	ssl_protocols		TLSv1.2 TLSv1.3;
+	
+	index index.php index.html index.htm wordpress/index.php;
+
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    	fastcgi_pass wordpress:9000;
+    	fastcgi_index index.php;
+    	include fastcgi_params;
+    	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    	fastcgi_param PATH_INFO $fastcgi_path_info;
+		fastcgi_intercept_errors off;
+		fastcgi_buffer_size 16k;
+		fastcgi_buffers 16 32k;
+		fastcgi_connect_timeout 120;
+		fastcgi_send_timeout 120;
+		fastcgi_read_timeout 120;
+	}
+
+	# Default all unfound files to 404
+	location / {
+		autoindex on;
+		try_files $uri $uri/ =404;
+	}
+
+	# # Everything is a 404
+	# location / {
+	# 	return 404;
+	# }
+
+	# # You may need this to prevent return 404 recursion.
+	# location = /404.html {
+	# 	internal;
+	# }
+}
+}
