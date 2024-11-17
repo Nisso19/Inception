@@ -8,7 +8,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		--dbpass=$MYSQL_PASSWORD \
 	       	--dbhost='mariadb' \
 		--path='/var/www/wordpress'
-	sleep 10
+	sleep 5
 	if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		echo "wp-config.php n'est pas creer"
 	else
@@ -18,12 +18,12 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
 		sleep 5
 	done
 	wp core install --allow-root \
-		--url='mariadb' \
+		--url='yaainouc.42.fr' \
 		--title=$WP_TITLE \
 		--admin_user=$WP_ADMIN \
 		--admin_password=$WP_ADMIN_PASSWORD \
-		--path='/var/www/wordpress' \
-		--admin_email='test@test.com' 
+		--path='/var/www/wordpress'\
+		--admin_email=$WP_ADMIN_EMAIL
     	wp user create $WP_USER \
 		$WP_USER_EMAIL \
 		--role=author \
