@@ -1,15 +1,16 @@
 NAME = Inception
 
-all:
-	mkdir -p /home/inception/data-wordpress
-	mkdir -p /home/inception/data-mariadb
-	docker compose -f srcs/docker-compose.yml up --build
-
+all: up 
+	
+	
+up:
+	sudo mkdir -p /home/inception/data-wordpress
+	sudo mkdir -p /home/inception/data-mariadb
+	docker compose -f srcs/docker-compose.yml up -d --build
+start:
+	docker compose -f srcs/docker-compose.yml start
 stop:
 	docker compose -f srcs/docker-compose.yml stop
-dir:
-	mkdir -p /home/inception/data-mariadb
-	mkdir -p /home/inception/data-wordpress
 down:
 	docker compose -f ./srcs/docker-compose.yml down
 clean:
@@ -18,6 +19,6 @@ clean:
 	sudo rm -rf /home/inception/data-mariadb
 
 fclean: clean
-	docker system prune -a
+	docker system prune -f -a --volumes
 
 .PHONY: all stop start down re clean fclean
