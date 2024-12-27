@@ -11,4 +11,5 @@ RUN chmod +x /usr/local/bin/mariadbscript.sh
 RUN chmod -R 770 /var/lib/mysql
 RUN chgrp -R mysql /var/lib/mysql
 USER root
+EXPOSE 3306
 ENTRYPOINT [ "bash", "/usr/local/bin/mariadbscript.sh" ]

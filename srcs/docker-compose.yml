@@ -1,7 +1,7 @@
 services:
   mariadb:
     container_name: mariadb
-    image: mariadb:inception
+    image: mariadb
     env_file: .env
     networks:
     - inception
@@ -15,7 +15,7 @@ services:
  
   nginx:
     container_name: nginx
-    image: nginx:inception
+    image: nginx
     networks:
       - inception
     depends_on:
@@ -30,7 +30,7 @@ services:
  
   wordpress:
     container_name: wordpress
-    image: wordpress:inception
+    image: wordpress
     networks:
     - inception
     depends_on:
@@ -49,13 +49,13 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: /home/inception/data-mariadb
+      device: /home/yaainouc/data/data-mariadb
   mariadb:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: /home/inception/data-wordpress
+      device: /home/yaainouc/data/data-wordpress
 networks:
   inception:
     name: inception
